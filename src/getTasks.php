@@ -11,7 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 
-class getTasks extends Command {
+class getTasks extends Command
+{
     protected function configure()
     {
         $this
@@ -29,6 +30,7 @@ class getTasks extends Command {
                 'If set, the description will be printed'
             );
     }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $OFDB = new OFDB();
@@ -40,6 +42,9 @@ class getTasks extends Command {
             case 'all':
                 $tasks = $OFDB->getAll();
                 break;
+            case 'available':
+                $tasks = $OFDB->getAvailable();
+                break;
             case 'getDue':
             default:
                 $tasks = $OFDB->getDue();
@@ -50,17 +55,27 @@ class getTasks extends Command {
         $formatted_tasks = [];
 
         if ($input->getOption('full')) {
-            $headers = ['Project', 'Action', 'Due date', 'Note'];
+            $headers = ['Project', 'Action', 'Due date', 'Start date', 'Note'];
             foreach ($tasks as $task) {
-                $formatted_tasks[] =  [$this->wrapText($task->project, 30), $this->wrapText($task->name, 50), $this->formatDate($task->dateDue), $this->wrapText($task->plainTextNote)];
-                $formatted_tasks[] =  new TableSeparator();
+                $formatted_tasks[] = [
+                    $this->wrapText($task->project, 30),
+                    $this->wrapText($task->name, 50),
+                    $this->formatDate($task->dateDue),
+                    $this->formatDate($task->dateToStart),
+                    $this->wrapText($task->plainTextNote),
+                ];
+                $formatted_tasks[] = new TableSeparator();
             }
             array_pop($formatted_tasks);
         } else {
             $table->setStyle('borderless');
             $headers = ['Project', 'Action', 'Due date'];
             foreach ($tasks as $task) {
-                $formatted_tasks[] = [$this->wrapText($task->project, 30), $this->wrapText($task->name, 50), $this->formatDate($task->dateDue)];
+                $formatted_tasks[] = [
+                    $this->wrapText($task->project, 30),
+                    $this->wrapText($task->name, 50),
+                    $this->formatDate($task->dateDue),
+                ];
             }
         }
 
@@ -71,27 +86,31 @@ class getTasks extends Command {
         $table->render();
     }
 
-    private function wrapText($input, $length = 50) {
-        return wordwrap( $input, $length, "\n" , true);
+    private function wrapText($input, $length = 50)
+    {
+        return wordwrap($input, $length, "\n", true);
     }
 
-    private function formatDate($timestamp) {
+    private function formatDate($timestamp)
+    {
 
-        if ($timestamp > 0 ) {
+        if ($timestamp > 0) {
             $today = date('d.m.Y');
             $tomorrow = date('d.m.Y', strtotime('tomorrow'));
             if ($today == date('d.m.Y', $timestamp)) {
                 $formatted_date = 'Today';
-            } else if ($tomorrow == date('d.m.Y', $timestamp)) {
-                $formatted_date = 'Tomorrow';
             } else {
-                $formatted_date = date('d.m.Y', $timestamp);
+                if ($tomorrow == date('d.m.Y', $timestamp)) {
+                    $formatted_date = 'Tomorrow';
+                } else {
+                    $formatted_date = date('d.m.Y', $timestamp);
+                }
             }
 
             $formatted_date .= date(' - H:i', $timestamp);
 
             if ($timestamp < time()) {
-                $formatted_date = '<error>' . $formatted_date . '</error>';
+                $formatted_date = '<error>'.$formatted_date.'</error>';
             }
 
         } else {
