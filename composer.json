@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "corneltek/cliframework": "^2.8"
+    "symfony/console": "^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "5.1.*"

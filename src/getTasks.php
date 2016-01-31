@@ -50,17 +50,17 @@ class getTasks extends Command {
         $formatted_tasks = [];
 
         if ($input->getOption('full')) {
-            $headers = ['Action', 'Note'];
+            $headers = ['Project', 'Action', 'Due date', 'Note'];
             foreach ($tasks as $task) {
-                $formatted_tasks[] =  [$this->wrapText($task[0], 50), $this->wrapText($task[1])];
+                $formatted_tasks[] =  [$task->project, $this->wrapText($task->name, 50), $this->formatDate($task->dateDue), $this->wrapText($task->plainTextNote)];
                 $formatted_tasks[] =  new TableSeparator();
             }
             array_pop($formatted_tasks);
         } else {
             $table->setStyle('borderless');
-            $headers = array('Action');
+            $headers = ['Project', 'Action', 'Due date'];
             foreach ($tasks as $task) {
-                $formatted_tasks[] = [$task[0], $this->formatDate($task[2])];
+                $formatted_tasks[] = [$task->project, $this->wrapText($task->name, 50), $this->formatDate($task->dateDue)];
             }
         }
 
@@ -77,17 +77,27 @@ class getTasks extends Command {
 
     private function formatDate($timestamp) {
 
-        $today = date('d.m.Y');
-        $tomorrow = date('d.m.Y', strtotime('tomorrow'));
-        if ($today == date('d.m.Y', $timestamp)) {
-          $formatted_date = 'Today';
-        } else if ($tomorrow == date('d.m.Y', $timestamp)) {
-            $formatted_date = 'Tomorrow';
+        if ($timestamp > 0 ) {
+            $today = date('d.m.Y');
+            $tomorrow = date('d.m.Y', strtotime('tomorrow'));
+            if ($today == date('d.m.Y', $timestamp)) {
+                $formatted_date = 'Today';
+            } else if ($tomorrow == date('d.m.Y', $timestamp)) {
+                $formatted_date = 'Tomorrow';
+            } else {
+                $formatted_date = date('d.m.Y', $timestamp);
+            }
+
+            $formatted_date .= date(' - H:i', $timestamp);
+
+            if ($timestamp < time()) {
+                $formatted_date = '<error>' . $formatted_date . '</error>';
+            }
+
         } else {
-            $formatted_date = date('d.m.Y', $timestamp);
+            $formatted_date = '';
         }
 
-        $formatted_date .= date(' - H:i', $timestamp);
         return $formatted_date;
     }
 }

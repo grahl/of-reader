@@ -1,9 +1,6 @@
 <?php
 
 namespace Grahl\OFReader;
-use CLIFramework\Component\Table\Table;
-use CLIFramework\Component\Table\CellAttribute;
-use CLIFramework\Component\Table\CompactTableStyle;
 
 
 class OFDB {
@@ -20,23 +17,66 @@ class OFDB {
     public function getDue() {
         $time = strtotime('today 5pm') - $this->epoch_offset;
 
-        $query = $this->database->prepare("SELECT * FROM Task where dateDue <=$time and dateCompleted is Null");
-        $tasks = $query->execute();
+        $query = $this->database->prepare("SELECT * FROM Task where dateDue <=$time and dateCompleted is Null and projectInfo is Null");
+        $query->execute();
         $tasks = $query->fetchAll();
-        $this->formatTasks($tasks);
+
+        return $this->formatTasks($tasks);
+    }
+
+    public function getAll() {
+        $query = $this->database->prepare("SELECT * FROM Task where projectInfo is Null");
+        $query->execute();
+        $tasks = $query->fetchAll();
+
+        return $this->formatTasks($tasks);
+
+    }
+
+    public function getOpen() {
+        $query = $this->database->prepare("SELECT * FROM Task where dateCompleted is Null and projectInfo is Null");
+        $query->execute();
+        $tasks = $query->fetchAll();
+
+        return $this->formatTasks($tasks);
+
     }
 
 
-    private function formatTasks($tasks) {
-        $attrs = new CellAttribute;
-        $attrs->setTextOverflow(CellAttribute::ELLIPSIS);
-        $table = new Table;
-        $table->setHeaders([ 'Name', 'Description' ]);
-        $table->setStyle(new CompactTableStyle);
-        foreach ($tasks as $task) {
-            $table->addRow(array($task['name'], [$attrs, $task['plainTextNote']]));
+    private function convertDate($input) {
+        if ($input > 0 ) {
+            return $this->epoch_offset + $input;
+        } else {
+            return 0;
         }
-        echo $table->render();
+    }
+
+    private function fetchParent($id) {
+        $query = $this->database->prepare("SELECT * FROM task WHERE persistentIdentifier=:id");
+        $query->execute([':id' => $id]);
+        return $query->fetch();
+    }
+
+    private function formatTasks($tasks) {
+        foreach ($tasks as $task) {
+            $parentTask = $this->fetchParent($task['parent']);
+            $project_label = '';
+            $separator = '';
+            while (empty($parentTask['projectInfo'])) {
+                $project_label = $parentTask['name']  . $separator . $project_label;
+                $parentTask = $this->fetchParent($parentTask['parent']);
+                $separator = ': ';
+            }
+            $project_label = $parentTask['name']  . $separator . $project_label;
+            $formatted_task = new \stdClass();
+            $formatted_task->project = $project_label;
+            $formatted_task->name = $task['name'];
+            $formatted_task->plainTextNote = $task['plainTextNote'];
+            $formatted_task->dateDue = $this->convertDate($task['dateDue']);
+            $formatted_tasks[] = $formatted_task;
+
+        }
+        return $formatted_tasks;
     }
 }
 
