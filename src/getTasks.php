@@ -52,7 +52,7 @@ class getTasks extends Command {
         if ($input->getOption('full')) {
             $headers = ['Project', 'Action', 'Due date', 'Note'];
             foreach ($tasks as $task) {
-                $formatted_tasks[] =  [$task->project, $this->wrapText($task->name, 50), $this->formatDate($task->dateDue), $this->wrapText($task->plainTextNote)];
+                $formatted_tasks[] =  [$this->wrapText($task->project, 30), $this->wrapText($task->name, 50), $this->formatDate($task->dateDue), $this->wrapText($task->plainTextNote)];
                 $formatted_tasks[] =  new TableSeparator();
             }
             array_pop($formatted_tasks);
@@ -60,7 +60,7 @@ class getTasks extends Command {
             $table->setStyle('borderless');
             $headers = ['Project', 'Action', 'Due date'];
             foreach ($tasks as $task) {
-                $formatted_tasks[] = [$task->project, $this->wrapText($task->name, 50), $this->formatDate($task->dateDue)];
+                $formatted_tasks[] = [$this->wrapText($task->project, 30), $this->wrapText($task->name, 50), $this->formatDate($task->dateDue)];
             }
         }
 
@@ -71,7 +71,7 @@ class getTasks extends Command {
         $table->render();
     }
 
-    private function wrapText($input, $length = 70) {
+    private function wrapText($input, $length = 50) {
         return wordwrap( $input, $length, "\n" , true);
     }
 

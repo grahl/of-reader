@@ -2,6 +2,7 @@
 
 namespace Grahl\OFReader;
 
+use Symfony\Component\Yaml\Yaml;
 
 class OFDB {
 
@@ -10,7 +11,17 @@ class OFDB {
     protected $epoch_offset = 978307200;
 
     public function __construct() {
-        $this->database = new \PDO('sqlite:/home/hendrik/OmniFocusDatabase2');
+
+        $file = __DIR__ . '/../config.yml';
+        $config = Yaml::parse(file_get_contents($file));
+
+        if (isset($config['application']) && isset($config['application']['database'])) {
+            $db_file = $config['application']['database'];
+        } else {
+            $db_file = $_SERVER['HOME'] . '/OmniFocusDatabase2';
+        }
+
+        $this->database = new \PDO('sqlite:' . $db_file);
         $this->database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 

@@ -1,0 +1,2 @@
+application:
+  database: /your/custom/path/including/filename
