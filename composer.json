@@ -1,0 +1,23 @@
+{
+  "name": "grahl/OFReader",
+  "description": "A library and client to read OmniFocus databases",
+  "license": "MIT",
+  "keywords": ["ofreader", "omnifocus"],
+  "authors": [
+    {
+      "name": "Hendrik Grahl",
+      "email": "hendrik@grahl.ch"
+    }
+  ],
+  "require": {
+    "corneltek/cliframework": "^2.8"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Grahl\\OFReader\\": "src"
+    }
+  }
+}
