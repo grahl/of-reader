@@ -4,10 +4,20 @@ OFReader allows you to query an OmniFocus™ 2 SQLite database with ease through
 
 ## Installation
 
+
+### Requirements
+
 - Install composer
-- composer install
-- If you want your database to live elsewhere than $HOME/OmniFocusDatabase2 use config.yml to define your custom location (see config.yml.default).
-- You need access to your OmniFocusDatabase2, this can usually be found in `/USERS/$USER/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2`. Syncing this via SSH to another is convenient.
+- Get dependencies: composer install
+
+### Configuration
+
+You need access to your OmniFocusDatabase2. It is not recommended to directly access your database, instead use a copy created by a cron job or LaunchAgent. You can find your database usually at `/Users/$USER/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2`.
+
+The default location for the database is $HOME/OmniFocusDatabase2, use config.yml to define your custom location (see config.yml.default).
+
+If your database is on another system, you can start with docs/sync-omnifocus.plist to upload it to a remote host.
+
 
 ## Usage
 
