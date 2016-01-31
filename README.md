@@ -1,6 +1,6 @@
 ## Summary  
 
-OFReader allows you to query an OmniFocus (TM) 2 SQLite database with ease through the command line. This tool is useful for people who use OmniFocus in their daily lives but also work on Linux machines and sometimes need information contained in OmniFocus.
+OFReader allows you to query an OmniFocus™ 2 SQLite database with ease through the command line. This tool is useful for people who use OmniFocus in their daily lives but also work on Linux machines and sometimes need information contained in OmniFocus.
 
 ## Requirements
 
