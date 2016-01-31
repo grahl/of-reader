@@ -2,13 +2,20 @@
 
 OFReader allows you to query an OmniFocus™ 2 SQLite database with ease through the command line. This tool is useful for people who use OmniFocus in their daily lives but also work on Linux machines and sometimes need information contained in OmniFocus.
 
-## Requirements
-
 ## Installation
 
 - Install composer
 - composer install
 - If you want your database to live elsewhere than $HOME/OmniFocusDatabase2 use config.yml to define your custom location (see config.yml.default).
+- You need access to your OmniFocusDatabase2, this can usually be found in `/USERS/$USER/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2`. Syncing this via SSH to another is convenient.
+
+## Usage
+
+```./OFReader list (due|all|open) (--full)
+
+### Example output
+
+![screenshot of output][docs/demo.png]
 
 ## Todos
 
