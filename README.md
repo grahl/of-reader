@@ -30,6 +30,7 @@ If your database is on another system, you can start with docs/sync-omnifocus.pl
 ## Todos
 
 - Provide search capabilities
+- Sort / group projects by subtasks
 - Improve output options
 - Support contexts 
 - Support perspectives
