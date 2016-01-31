@@ -1,6 +1,8 @@
 {
   "name": "grahl/OFReader",
   "description": "A library and client to read OmniFocus databases",
+  "version": "0.1.0",
+  "time": "2016-01-31",
   "license": "MIT",
   "keywords": ["ofreader", "omnifocus"],
   "authors": [

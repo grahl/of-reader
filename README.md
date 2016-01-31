@@ -18,7 +18,7 @@ OFReader allows you to query an OmniFocus (TM) 2 SQLite database with ease throu
 - Support perspectives
 - Add unit tests
 
-I do not plan on adding write-support to this project, if you want to do so, consider forking this project. Otherwise, merge requests are very welcome.
+I do not plan on adding write-support to this project, if you want to do so, consider forking this project. Otherwise, merge requests and feedback are very welcome.
 
 ## License 
 
