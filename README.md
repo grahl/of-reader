@@ -11,11 +11,11 @@ OFReader allows you to query an OmniFocus™ 2 SQLite database with ease through
 
 ## Usage
 
-```./OFReader list (due|all|open) (--full)
+`./OFReader list (due|all|open) (--full)`
 
 ### Example output
 
-![screenshot of output][docs/demo.png]
+![screenshot of output](docs/demo.png)
 
 ## Todos
 
